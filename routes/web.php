@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DatabaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+
+Route::get('/', [DatabaseController::class, 'showForm']);
+Route::post('/database-connection', [DatabaseController::class, 'checkConnection']);
+Route::post('/migrate-table', [DatabaseController::class, 'migrateTable']);
+Route::get('/site-settings', [DatabaseController::class, 'siteSettings'])->name('sites');
+
+
+
+
