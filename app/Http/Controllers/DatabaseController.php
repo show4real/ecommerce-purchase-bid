@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
+use App\Models\Settings;
 
 class DatabaseController extends Controller
 {
@@ -83,8 +85,40 @@ class DatabaseController extends Controller
 
     public function siteSettings(Request $request){
 
-
         return view('database.sites');
+
+    }
+
+    public function siteSetup(Request $request){
+
+        return view('database.completed');
+
+    }
+
+    public function storeSite(Request $request){
+
+        $this->validate($request, [
+            'email' => 'required|email|unique:users,email',
+        ]);
+
+        $user = new User();
+
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
+        $user->phone = $request->phone;
+        //$user->username = $request->username;
+        $user->email = $request->email;
+        $user->admin = 1;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        $site =new Settings();
+        $site->site_name = $request->site_name;
+        $site->site_url = $request->site_url;
+        $site->save();
+
+        return redirect()->route('sites_connection');
+        
 
     }
 

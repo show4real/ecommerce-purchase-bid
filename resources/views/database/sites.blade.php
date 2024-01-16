@@ -16,10 +16,10 @@
           
             <h2 class="text-center mb-4">Site Information Form</h2>
             
-            <form>
+            <form action="/site-settings" method="post">
                 <div class="form-group">
                     <label for="siteTitle">Site Title:</label>
-                    <input type="text" class="form-control" id="siteTitle" name="siteTitle" required>
+                    <input type="text" class="form-control" id="siteTitle" name="site_title" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone:</label>
@@ -31,15 +31,19 @@
                 </div>
                 <div class="form-group">
                     <label for="siteUrl">Site URL:</label>
-                    <input type="url" class="form-control" id="siteUrl" name="siteUrl" required>
+                    <input type="url" class="form-control" id="siteUrl" name="site_url" required>
+                </div>
+                 <div class="form-group">
+                    <label for="siteName">Site Name:</label>
+                    <input type="text" class="form-control" id="siteUrl" name="site_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="adminEmail">Admin Email:</label>
-                    <input type="email" class="form-control" id="adminEmail" name="adminEmail" required>
+                    <label for="email">Admin Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="adminPassword">Admin Password:</label>
-                    <input type="password" class="form-control" id="adminPassword" name="adminPassword" required>
+                    <label for="password">Admin Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Submit</button>
