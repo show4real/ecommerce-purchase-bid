@@ -8,15 +8,38 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+use Tymon\JWTAuth\Contracts\JWTSubject;
+;
+
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+
+    protected $appends = ['name'];
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+
     protected $fillable = [
         'name',
         'email',
@@ -41,4 +64,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+     public function scopeSearch($query, $filter)
+    {
+        $searchQuery = trim($filter);
+        $requestData = ['firstname','lastname', 'phone'];
+        $query->when($filter != '', function ($query) use ($requestData, $searchQuery) {
+            return $query->where(function ($q) use ($requestData, $searchQuery) {
+                foreach ($requestData as $field)
+                    $q->orWhere($field, 'like', "%{$searchQuery}%");
+            });
+        });
+    }
+
+
+    public function getNameAttribute(){
+
+        return $this->firstname." ".$this->lastname;
+    }
 }

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Settings;
 
@@ -89,7 +90,7 @@ class DatabaseController extends Controller
 
     }
 
-    public function siteSetup(Request $request){
+    public function siteCompleted(Request $request){
 
         return view('database.completed');
 
@@ -97,16 +98,25 @@ class DatabaseController extends Controller
 
     public function storeSite(Request $request){
 
-        $this->validate($request, [
+      
+
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|numeric|unique:users',
             'email' => 'required|email|unique:users,email',
+        
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('sites_connection')
+                             ->withErrors($validator)
+                             ->withInput();
+        }
 
         $user = new User();
 
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->phone = $request->phone;
-        //$user->username = $request->username;
         $user->email = $request->email;
         $user->admin = 1;
         $user->password = bcrypt($request->password);
@@ -117,7 +127,7 @@ class DatabaseController extends Controller
         $site->site_url = $request->site_url;
         $site->save();
 
-        return redirect()->route('sites_connection');
+        return redirect()->route('sites_setup_completed');
         
 
     }

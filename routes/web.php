@@ -24,7 +24,7 @@ Route::post('/database-connection', [DatabaseController::class, 'checkConnection
 Route::post('/migrate-table', [DatabaseController::class, 'migrateTable']);
 Route::get('/site-settings', [DatabaseController::class, 'siteSettings'])->name('sites');
 Route::post('/site-settings',[DatabaseController::class, 'storeSite'])->name('sites_connection');
-Route::post('/setup-finished',[DatabaseController::class, 'siteCompleted'])->name('sites_setup_completed');
+Route::get('/setup-finished',[DatabaseController::class, 'siteCompleted'])->name('sites_setup_completed');
 
 
 
