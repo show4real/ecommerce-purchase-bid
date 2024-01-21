@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
-;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -81,5 +80,20 @@ class User extends Authenticatable implements JWTSubject
     public function getNameAttribute(){
 
         return $this->firstname." ".$this->lastname;
+    }
+
+
+    public function scopeRole($query, $filter)
+    {
+        if ($filter == 'admin') {
+            return $query->where('admin', 1);
+        } else if($filter == 'customer'){
+             return $query->where('customer', 1);
+        } else if($filter == 'seller'){
+            return $query->where('seller', 1);
+        } else if($filter == null){
+            return $query;
+        }
+       
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +23,24 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
 
 });
-Route::controller(UserController::class)->group(function () {
-    Route::post('users', 'index');
-    Route::post('user/profile', 'profile');
-    Route::post('user/profile/update', 'addProfile');
+
+Route::middleware(['auth:api', 'CheckAdmin'])->group(function () {
+
+    Route::controller(UserController::class)->group(function () {
+
+
+        Route::post('users', 'index');
+        Route::post('add/user', 'store');
+        Route::post('update/user/{user}', 'update');
+        Route::post('user/profile', 'profile');
+        Route::post('user/profile/update', 'addProfile');
+        Route::post('delete/user/{user}', 'delete');
+    }); 
+
+     Route::controller(DashboardController::class)->group(function () {
+
+        Route::post('dashboard', 'dashboard');
+    }); 
+
 });
+
